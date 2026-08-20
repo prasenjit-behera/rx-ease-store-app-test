@@ -15,12 +15,26 @@ app = FastAPI(
 )
 
 
+# origins = [
+#     "http://localhost:8080",
+#     "http://localhost:5173",
+#     "https://rx-ease-store-app-test.vercel.app",
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 origins = [
-    "http://localhost:8080",
-    "http://localhost:5173",
-    "https://rx-ease-store-app-test.vercel.app",
+    origin.strip()
+    for origin in CORS_ORIGINS.split(",")
+    if origin.strip()
 ]
 
+# origins = CORS_ORIGINS.split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -28,16 +42,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# origins = CORS_ORIGINS.split(",")
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=[o.strip() for o in origins if o.strip()],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
 
 app.include_router(auth_routes.router)
 app.include_router(medicines.router)
